@@ -2,6 +2,7 @@ package com.jason.tester;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -11,11 +12,16 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+        SharedPreferences pref = getSharedPreferences("Testing", MODE_PRIVATE);
 
-        Bundle bundleResult = this.getIntent().getExtras();
-        String account = bundleResult.getString("Account");
-        String email = bundleResult.getString("E-mail");
-        String password = bundleResult.getString("Password");
+//        Bundle bundleResult = this.getIntent().getExtras();
+//        String account = bundleResult.getString("Account");
+//        String email = bundleResult.getString("E-mail");
+//        String password = bundleResult.getString("Password");
+
+        String account = pref.getString("Account", "Data not found");
+        String email = pref.getString("E-mail", null);
+        String password = pref.getString("Password", "Data not found");
 
         TextView opAccount = findViewById(R.id.op1);
         opAccount.setText("您的帳號: " + account);

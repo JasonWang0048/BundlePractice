@@ -2,11 +2,13 @@ package com.jason.tester;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edAccount;
     private EditText edEmail;
     private EditText edPassword;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         edAccount = findViewById(R.id.account);
         edEmail = findViewById(R.id.email);
         edPassword = findViewById(R.id.password);
+        pref = getSharedPreferences("Testing", MODE_PRIVATE);
 
         Button okButton = findViewById(R.id.ok);
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -55,15 +59,27 @@ public class MainActivity extends AppCompatActivity {
         String user = edAccount.getText().toString();
         String mail = edEmail.getText().toString();
         String pass = edPassword.getText().toString();
-
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, ResultActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("Account", user);
-        bundle.putString("E-mail", mail);
-        bundle.putString("Password", pass);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if (user.equals("") || mail.equals("") || pass.equals("")) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Error")
+                    .setMessage("Please enter your data completely, Thanks!")
+                    .setPositiveButton("Ok", null)
+                    .show();
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, ResultActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("Account", user);
+//        bundle.putString("E-mail", mail);
+//        bundle.putString("Password", pass);
+//        intent.putExtras(bundle);
+            pref.edit()
+                    .putString("Account", user)
+                    .putString("E-mail", mail)
+                    .putString("Password", pass)
+                    .commit();
+            startActivity(intent);
+        }
     }
 
     public void reset() {
