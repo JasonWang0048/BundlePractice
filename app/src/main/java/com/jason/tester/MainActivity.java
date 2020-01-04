@@ -20,10 +20,11 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText edAccount;
+/*    private EditText edAccount;
     private EditText edEmail;
     private EditText edPassword;
     private SharedPreferences pref;
+ */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +32,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        edAccount = findViewById(R.id.account);
+/*        edAccount = findViewById(R.id.account);
         edEmail = findViewById(R.id.email);
         edPassword = findViewById(R.id.password);
         pref = getSharedPreferences("Testing", MODE_PRIVATE);
-
+ */
         Button okButton = findViewById(R.id.ok);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
-                reset();
+//                login();
+//                reset();
+                transfer();
             }
         });
 
@@ -55,11 +57,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void login() {
+//    public void login() {
+    public void transfer() {
+/*
         String user = edAccount.getText().toString();
         String mail = edEmail.getText().toString();
         String pass = edPassword.getText().toString();
-        if (user.equals("") || mail.equals("") || pass.equals("")) {
+ */
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, AccountActivity.class);
+        startActivity(intent);
+/*        if (user.equals("") || mail.equals("") || pass.equals("")) {
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Error")
                     .setMessage("Please enter your data completely, Thanks!")
@@ -80,14 +88,15 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
             startActivity(intent);
         }
+ */
     }
-
+/*
     public void reset() {
         edAccount.setText("");
         edEmail.setText("");
         edPassword.setText("");
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
