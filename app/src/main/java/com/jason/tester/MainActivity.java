@@ -1,6 +1,5 @@
 package com.jason.tester;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,14 +16,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-/*    private EditText edAccount;
-    private EditText edEmail;
-    private EditText edPassword;
+    private TextView edAccount;
+    private TextView edEmail;
+    private TextView edPassword;
+    private String title;
+    private String message;
     private SharedPreferences pref;
- */
+    private String account;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +36,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*        edAccount = findViewById(R.id.account);
-        edEmail = findViewById(R.id.email);
-        edPassword = findViewById(R.id.password);
-        pref = getSharedPreferences("Testing", MODE_PRIVATE);
- */
-        Button okButton = findViewById(R.id.ok);
-        okButton.setOnClickListener(new View.OnClickListener() {
+        edAccount = findViewById(R.id.ip1);
+        edEmail = findViewById(R.id.ip2);
+        edPassword = findViewById(R.id.ip3);
+        pref = getSharedPreferences("LOGIN", MODE_PRIVATE);
+
+        Button loginButton = findViewById(R.id.login);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                login();
-//                reset();
+                signIn();
+            }
+        });
+
+        Button registerButton = findViewById(R.id.register);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 transfer();
             }
         });
@@ -51,52 +61,51 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                reset();
             }
         });
+        signUp();
     }
 
-//    public void login() {
+    public void signUp() {
+        account = pref.getString("ACCOUNT", "Data not found");
+        email = pref.getString("EMAIL", null);
+        password = pref.getString("PASSWORD", "Data not found");
+        if (!account.equals("Data not found") && !password.equals("Data not found")) {
+            edAccount.setText(account);
+            edEmail.setText(email);
+            edPassword.setText(password);
+        }
+    }
+
+    public void signIn() {
+//        String account = edAccount.getText().toString();
+//        String password = edPassword.getText().toString();
+        if (edAccount.getText().toString().equals(account) && edPassword.getText().toString().equals(password)) {
+            title = "登入成功";
+            message = "歡迎, " + account + "!";
+        } else {
+            title = "登入失敗";
+            message = "帳號或密碼輸入錯誤!";
+        } new AlertDialog.Builder(MainActivity.this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
     public void transfer() {
-/*
-        String user = edAccount.getText().toString();
-        String mail = edEmail.getText().toString();
-        String pass = edPassword.getText().toString();
- */
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, AccountActivity.class);
         startActivity(intent);
-/*        if (user.equals("") || mail.equals("") || pass.equals("")) {
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Error")
-                    .setMessage("Please enter your data completely, Thanks!")
-                    .setPositiveButton("Ok", null)
-                    .show();
-        } else {
-            Intent intent = new Intent();
-            intent.setClass(MainActivity.this, ResultActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("Account", user);
-//        bundle.putString("E-mail", mail);
-//        bundle.putString("Password", pass);
-//        intent.putExtras(bundle);
-            pref.edit()
-                    .putString("Account", user)
-                    .putString("E-mail", mail)
-                    .putString("Password", pass)
-                    .commit();
-            startActivity(intent);
-        }
- */
     }
-/*
+
     public void reset() {
         edAccount.setText("");
         edEmail.setText("");
         edPassword.setText("");
     }
-*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
