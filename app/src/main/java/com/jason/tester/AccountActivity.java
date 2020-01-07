@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -40,8 +41,17 @@ public class AccountActivity extends AppCompatActivity {
                 .putString("ACCOUNT", edAccount.getText().toString())
                 .commit();
 
-        Intent intent = new Intent();
-        intent.setClass(AccountActivity.this, EmailActivity.class);
-        startActivity(intent);
+        if (!edAccount.getText().toString().equals("")) {
+            Intent intent = new Intent();
+            intent.setClass(AccountActivity.this, EmailActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            new AlertDialog.Builder(AccountActivity.this)
+                    .setTitle("錯誤")
+                    .setMessage("請輸入資料, 謝謝!")
+                    .setPositiveButton("OK", null)
+                    .show();
+        }
     }
 }

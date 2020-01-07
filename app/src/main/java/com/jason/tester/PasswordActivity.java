@@ -40,10 +40,9 @@ public class PasswordActivity extends AppCompatActivity {
                 .putString("PASSWORD", edPassword.getText().toString())
                 .commit();
 
-
-
         Intent intent = new Intent();
         intent.setClass(PasswordActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

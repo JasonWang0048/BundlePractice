@@ -1,5 +1,7 @@
 package com.jason.tester;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE = 1;
     private TextView edAccount;
     private TextView edEmail;
     private TextView edPassword;
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private String account;
     private String email;
     private String password;
+    private Boolean logon = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,20 +95,40 @@ public class MainActivity extends AppCompatActivity {
         } new AlertDialog.Builder(MainActivity.this)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("OK", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reset();
+                    }
+                })
                 .show();
     }
 
     public void transfer() {
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, AccountActivity.class);
-        startActivity(intent);
+        if (!logon) {
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, AccountActivity.class);
+//        startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
     }
 
     public void reset() {
         edAccount.setText("");
         edEmail.setText("");
         edPassword.setText("");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                finish();
+            } else {
+                logon = true;
+            }
+        }
     }
 
     @Override
